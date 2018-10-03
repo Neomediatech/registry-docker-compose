@@ -4,6 +4,7 @@ services:
   registry:
     image: registry:2
     restart: always
+    hotname: registry
     ports:
       - 5000:5000
     expose:
@@ -14,4 +15,17 @@ services:
       REGISTRY_HTTP_SECRET: 
     volumes:
       - /srv/data/docker/registry/registry:/var/lib/registry
-      - /srv/data/docker/registry/certs:/certs      
+      - /srv/data/docker/registry/certs:/certs
+
+  ui:
+    image: konradkleine/docker-registry-frontend:v2
+    ports:
+      - 40443:443
+    environment:
+      ENV_DOCKER_REGISTRY_HOST: registry
+      ENV_DOCKER_REGISTRY_PORT: 5000
+      ENV_USE_SSL: yes
+    volumes:
+      - /srv/data/docker/registry/certs/registry.crt:/etc/apache2/server.crt:ro
+      - /srv/data/docker/registry/certs/registry.key:/etc/apache2/server.key:ro
+  
