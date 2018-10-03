@@ -9,8 +9,9 @@ services:
     expose:
       - 5000
     environment:
-      - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.crt
-      - REGISTRY_HTTP_TLS_KEY=/certs/registry.key
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/registry.crt
+      REGISTRY_HTTP_TLS_KEY: /certs/registry.key
+      REGISTRY_HTTP_SECRET: 
     volumes:
       - /srv/data/docker/registry/registry:/var/lib/registry
       - /srv/data/docker/registry/certs:/certs      
