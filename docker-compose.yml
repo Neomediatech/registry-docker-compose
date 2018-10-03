@@ -4,7 +4,7 @@ services:
   registry:
     image: registry:2
     restart: always
-    hotname: registry
+    hostname: registry
     ports:
       - 5000:5000
     expose:
@@ -19,6 +19,7 @@ services:
 
   ui:
     image: konradkleine/docker-registry-frontend:v2
+    hostname: ui
     ports:
       - 40443:443
     environment:
