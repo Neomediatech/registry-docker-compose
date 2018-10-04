@@ -10,6 +10,7 @@ services:
       REGISTRY_HTTP_TLS_CERTIFICATE: '/certs/registry.crt'
       REGISTRY_HTTP_TLS_KEY: '/certs/registry.key'
       REGISTRY_HTTP_SECRET: 
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
     volumes:
       - /srv/data/docker/registry/registry:/var/lib/registry
       - /srv/data/docker/registry/certs:/certs
