@@ -18,3 +18,7 @@ Basically you have to do this:
 * `curl -L https://raw.githubusercontent.com/Neomediatech/registry-docker-compose/master/docker-compose.yml -o registry-docker-stack.yml`
 * `docker stack deploy --compose-file=registry-docker-stack.yml Registry`
 * access your Registry stack just deployed with a browser to http://ip-of-your-docker-host:5000
+
+## Some useful command
+Get the list of images  
+`curl -k https://10.40.50.7:5000/v2/_catalog`  
