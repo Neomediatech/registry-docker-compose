@@ -6,13 +6,11 @@ Customized docker-compose registry stack
 Anyway, my server aren't exposed over Internet and no one other than trusted users acces our servers. Then I opted for a insecure registry configuration: https://docs.docker.com/registry/insecure/#deploy-a-plain-http-registry  
 Basically you have to do this:  
 * `vi /etc/docker/daemon.json` (maybe the file doesn't exists, no problem) and add the section  
-`
-{  
-
-  "insecure-registries" : ["10.40.50.7:5000"]  
-  
-}  
-`
+```
+{
+  "insecure-registries" : ["10.40.50.7:5000"]
+}
+```
 * save & close
 * service docker restart
 
