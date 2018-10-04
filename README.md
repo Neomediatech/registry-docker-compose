@@ -7,8 +7,33 @@ Customized docker-compose registry stack
 * and [create|get] a (self-signed) certificate:  
 `DIR="/srv/data/docker/registry" ; openssl req -newkey rsa:4096 -nodes -sha256 -keyout $DIR/certs/registry.key -x509 -days 9000 -out $DIR/certs/registry.crt -subj "/C=IT/ST=Turin/L=Turin/O=Neomediatech/OU=IT Dept/CN=10.40.50.7/subjectAltName=IP:10.40.50.7"`
 
-`IP="10.40.50.7" ; DIR="/srv/data/docker/registry" ; openssl req -newkey rsa:4096 -nodes -sha256 -keyout $DIR/certs/registry.key -x509 -days 9000 -out $DIR/certs/registry.crt -subj "/C=IT/ST=Turin/L=Turin/O=Neomediatech/OU=IT Dept/CN=$IP" -extensions SAN -config <(echo -e "[req]\ndistinguished_name = req_distinguished_name\nreq_extensions = v3_req\nprompt = no\n[req_distinguished_name]\n[v3_req]\nkeyUsage = keyEncipherment, dataEncipherment\nextendedKeyUsage = serverAuth\n[SAN]\nsubjectAltName='IP:$IP'")`  
-(MAYBE I CAN USE `-extfile` to have a command line more clear)
+```
+IP="10.40.50.7"  
+DIR="/srv/data/docker/registry"  
+TMP_SSL_FILE=$(echo -n "openssl-" ; < /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo ".cnf";)  
+
+cat <<EOF > $TMP_SSL_FILE  
+[req]  
+distinguished_name = req_distinguished_name  
+req_extensions = v3_req  
+prompt = no  
+[req_distinguished_name]  
+countryName            = IT  
+stateOrProvinceName    = Torino  
+localityName           = Torino  
+organizationName       = Neomediatech  
+organizationalUnitName = IT Dept  
+commonName             = $IP  
+[v3_req]  
+keyUsage = keyEncipherment, dataEncipherment  
+extendedKeyUsage = serverAuth  
+[SAN]  
+subjectAltName='IP:$IP'  
+EOF   
+
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout $DIR/certs/registry.key -x509 -days 9000 -out $DIR/certs/registry.crt -extensions SAN -config $TMP_SSL_FILE  
+rm -f $TMP_SSL_FILE
+```  
 
 ## Usage
 * `curl -L https://raw.githubusercontent.com/Neomediatech/registry-docker-compose/master/docker-compose.yml -o registry-docker-stack.yml`
